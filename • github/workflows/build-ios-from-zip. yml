@@ -1,0 +1,61 @@
+name: Build XSign-ready unsigned IPA
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: macos-15
+    timeout-minutes: 55
+
+    steps:
+      - name: Download repository files
+        uses: actions/checkout@v4
+
+      - name: Unpack iOS source archive
+        run: |
+          mkdir -p ios-source
+          unzip -oq StockAnalysis-iOS-Source.zip -d ios-source
+
+      - name: Install iOS project generator
+        run: brew install xcodegen
+
+      - name: Configure Firebase
+        working-directory: ios-source
+        run: python3 scripts/prepare_config.py
+
+      - name: Generate Xcode project
+        working-directory: ios-source
+        run: xcodegen generate
+
+      - name: Build without signing
+        working-directory: ios-source
+        run: |
+          set -euo pipefail
+          xcodebuild -project StockAnalysis.xcodeproj \
+            -scheme StockAnalysis \
+            -configuration Release \
+            -sdk iphoneos \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath "$PWD/.build" \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            build | tee /tmp/build-log.txt | tail -85
+
+      - name: Package IPA for XSign
+        working-directory: ios-source
+        run: |
+          mkdir -p ipa/Payload
+          cp -R .build/Build/Products/Release-iphoneos/StockAnalysis.app ipa/Payload/
+          cd ipa
+          zip -qry ../../StockAnalysis-unsigned-XSign.ipa Payload
+
+      - name: Upload unsigned IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: StockAnalysis-IPA-for-XSign
+          path: StockAnalysis-unsigned-XSign.ipa
+          retention-days: 14
