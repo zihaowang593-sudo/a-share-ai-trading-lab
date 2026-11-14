@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b1424">
+<meta name="description" content="A股短线交易实验室：手动交易复盘和规则风控练习。无实盘行情，不提供交易信号。">
+<title>AI 短线交易实验室 · 手机原型</title>
+<style>
+:root{color-scheme:dark;--bg:#0b1424;--panel:#132238;--line:#29405a;--text:#eff5ff;--sub:#a7b9d0;--accent:#70c7b7;--warn:#f2c57c;--red:#fb8b87;--green:#80d0a8;--shadow:0 12px 35px rgba(0,0,0,.13)}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif}button,input,textarea{font:inherit}button{cursor:pointer}a{color:var(--accent)}.shell{margin:auto;max-width:720px;padding:0 16px 34px}.top{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:18px 0 20px}.brand{display:flex;align-items:center;gap:10px;line-height:1.15}.brand b{display:block;font-size:17px;letter-spacing:.03em}.brand small{font-size:11px;color:var(--sub);margin-top:5px;display:block}.mark{border:1px solid #35766f;color:var(--accent);padding:5px 9px;border-radius:11px;font-size:22px}.demo{font-size:11px;color:var(--warn);background:#3c3329;border:1px solid #64523c;border-radius:30px;padding:5px 9px;white-space:nowrap}.hero{margin:0 0 20px;background:linear-gradient(132deg,#172d3f,#142a36 45%,#123b39);border-radius:22px;padding:24px 20px;overflow:hidden}.eyebrow{font-size:10px;letter-spacing:.13em;color:var(--accent);font-weight:700;margin:0 0 10px}.hero h1{font-size:clamp(23px,6.2vw,34px);line-height:1.4;letter-spacing:-.03em;margin:0 0 10px}.hero h1 span{color:var(--accent)}.hero>p:last-child{font-size:13px;color:#c2d4e0;margin:0;max-width:560px}.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;border-bottom:1px solid var(--line);margin-bottom:18px;padding-bottom:7px}.tab{font-size:13px;white-space:nowrap;border:0;background:transparent;color:var(--sub);padding:9px 3px;border-radius:9px;font-weight:600}.tab.active{background:#233d4e;color:var(--accent)}.page{display:none}.page.active{display:block}.section-title{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:14px 0 12px}.section-title h2,.section-title h3{margin:0}.section-title h2{font-size:18px}.section-title h3{font-size:16px}.tag{font-size:11px;color:var(--sub);border:1px solid var(--line);padding:4px 8px;border-radius:30px;white-space:nowrap}.statgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.stat,.panel{border:1px solid var(--line);background:var(--panel);box-shadow:var(--shadow);border-radius:16px}.stat{padding:15px 13px;min-height:130px;display:flex;flex-direction:column}.stat>span,.stat small{color:var(--sub);font-size:11px}.stat strong{font-size:clamp(17px,5.2vw,24px);letter-spacing:-.04em;margin:12px 0 7px;white-space:nowrap}.stat small{margin-top:auto}.panel{padding:18px;margin:12px 0}.panel h3{margin:0 0 12px;font-size:16px}.two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px}.two-col div{display:flex;flex-direction:column;gap:7px;overflow:hidden}.two-col small{color:var(--sub)}.two-col strong{font-size:20px;white-space:nowrap}.muted{color:var(--sub);font-size:13px;line-height:1.65}.small{font-size:12px}.steps{padding-left:20px;color:#d1deec;line-height:1.9;font-size:13px}.warning{font-size:12px;padding:13px;border:1px solid #605541;border-radius:13px;background:#322d29;color:#f5dfb2}.form{display:grid;gap:13px}.fields-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:flex;flex-direction:column;gap:6px;min-width:0}.field label{font-size:12px;color:#bcd0e2;font-weight:600}.field input,.field textarea{width:100%;min-width:0;border:1px solid #37506b;border-radius:9px;background:#0d1b2c;color:#fff;padding:11px 10px;outline:0}.field input:focus,.field textarea:focus{border-color:var(--accent);box-shadow:0 0 0 2px #70c7b727}input[type=date]{font-size:13px}input[type=checkbox]{width:18px;height:18px;accent-color:#60ba9f}.switchline{display:flex;gap:10px;align-items:center;font-size:12px;color:var(--sub)}.primary{border:none;border-radius:11px;padding:12px 16px;background:var(--accent);color:#0a2027;font-weight:800;letter-spacing:.02em;margin-top:2px}.primary:active{filter:brightness(.88)}.result{border-color:#395b64}.result.blocked{border-color:#bb665e}.result h3{margin-bottom:5px}.status{display:inline-block;border:1px solid currentColor;border-radius:20px;font-size:12px;padding:4px 9px;margin:8px 0}.status.ok{color:var(--green)}.status.bad{color:var(--red)}.risk-values{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}.risk-values div{background:#0d1b2d;border-radius:9px;padding:10px}.risk-values small{display:block;color:var(--sub);font-size:11px}.risk-values strong{font-size:16px}.checks{padding-left:20px;color:#e6d7c8;font-size:12px;line-height:1.75}.notice{background:#143d35;border:1px solid #3d8b78;color:#d2f7eb;padding:9px 13px;border-radius:9px;margin-bottom:12px;font-size:12px}.linkbutton,.danger-text{font-size:12px;background:transparent;border:0;color:var(--accent);padding:5px 2px}.danger-text{color:var(--red)}.journal-list{display:grid;gap:10px}.journal-item{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:15px}.journal-item .line{display:flex;justify-content:space-between;align-items:center;gap:10px}.journal-item strong{font-size:18px}.journal-item small{color:var(--sub)}.journal-item p{font-size:12px;color:var(--sub);margin:6px 0;overflow-wrap:anywhere}.journal-item button{background:transparent;color:var(--red);border:0;font-size:12px;padding:4px 0}.positive{color:var(--green)!important}.negative{color:var(--red)!important}.empty{font-size:13px;color:var(--sub);text-align:center;padding:18px 0}.rules{display:grid;gap:9px}.rules p{display:flex;justify-content:space-between;border-bottom:1px solid var(--line);margin:0;padding:5px 0;font-size:13px;color:var(--sub)}.rules b{color:var(--text)}footer{font-size:10px;text-align:center;color:#70859c;padding:30px 0 5px}@media(min-width:620px){.hero{padding:30px}.shell{padding:0 22px 42px}.stat{padding:20px}}@media(max-width:360px){.tab{font-size:11px}.shell{padding:0 11px}.fields-2{gap:8px}.panel{padding:14px}.stat strong{font-size:17px}}
+
+</style>
+</head>
+<body>
+<div class="shell">
+<header class="top">
+ <div class="brand"><span class="mark">◈</span><span><b>A-Share Lab</b><small>短线交易实验室 · P0 原型</small></span></div>
+ <span class="demo">● 演示 / 手动输入</span>
+</header>
+<main>
+ <section class="hero"><p class="eyebrow">TRADING RESEARCH · RISK FIRST</p><h1>先把风险管住，<br><span>再谈交易机会。</span></h1><p>这是能在手机使用的交易记录与风控原型，不连接券商、不读取实时行情，也不生成买入推荐。</p></section>
+ <nav class="tabs" aria-label="应用功能"><button type="button" class="tab active" data-tab="home">总览</button><button type="button" class="tab" data-tab="risk">风险计算</button><button type="button" class="tab" data-tab="journal">交易复盘</button><button type="button" class="tab" data-tab="config">账户设置</button></nav>
+ <div id="notice" role="status" class="notice" hidden></div>
+ <section id="home" class="page active" aria-label="账户总览">
+   <div class="section-title"><h2>账户概览</h2><span class="tag">手动设定 · 非实时</span></div>
+   <div class="statgrid">
+    <article class="stat"><span>参考账户权益</span><strong id="home-equity">¥500,000</strong><small>可在设置中修改</small></article>
+    <article class="stat"><span>单笔计划亏损预算</span><strong id="home-trade-risk">¥1,250</strong><small>权益 × 0.25%</small></article>
+    <article class="stat"><span>股票总持仓上限</span><strong id="home-exposure-cap">¥100,000</strong><small>权益 × 20%</small></article>
+    <article class="stat"><span>本地交易记录</span><strong id="home-journal-count">0 笔</strong><small>仅保存在当前浏览器</small></article>
+   </div>
+   <article class="panel"><div class="section-title"><h3>本地复盘结果</h3></div><div class="two-col"><div><small>已录交易净盈亏</small><strong id="home-pnl">¥0</strong></div><div><small>外部支持 / 奖励（另记）</small><strong id="home-support">¥0</strong></div></div><p class="muted">交易净盈亏和外部转入必须分开统计。它们不能相加后当成策略收益。</p></article>
+   <article class="panel"><div class="section-title"><h3>使用路线</h3></div><ol class="steps"><li>在「账户设置」填写权益、敞口及累计盈亏。</li><li>在「风险计算」模拟一笔买入，检查是否触发上限。</li><li>在「交易复盘」手动记下已经结束的交易。</li></ol></article>
+   <p class="warning">重要：数值不是实时证券行情，规则只用于教学和计划检查；不能代替券商可卖数量、官方交易日历或独立投资判断。</p>
+ </section>
+ <section id="risk" class="page" aria-label="风险计算">
+   <div class="section-title"><h2>新买入风险检查</h2><span class="tag">不下单</span></div>
+   <article class="panel"><form id="risk-form" class="form">
+     <div class="field"><label for="risk-ticker">股票代码（选填）</label><input id="risk-ticker" inputmode="numeric" maxlength="6" placeholder="例如 300750"></div>
+     <div class="fields-2"><div class="field"><label for="risk-entry">拟买入价（元）</label><input id="risk-entry" type="number" min="0.01" step="0.01" value="100" required></div><div class="field"><label for="risk-stop">计划失效价（元）</label><input id="risk-stop" type="number" min="0.01" step="0.01" value="98" required></div></div>
+     <div class="fields-2"><div class="field"><label for="risk-qty">拟买入股数</label><input id="risk-qty" type="number" min="100" step="100" value="100" required></div><div class="field"><label for="risk-existing">该股已有市值（元）</label><input id="risk-existing" type="number" min="0" step="0.01" value="0"></div></div>
+     <label class="switchline"><input id="risk-halted" type="checkbox"><span>该股票处于停牌或已知不可交易状态</span></label>
+     <button type="submit" class="primary">检查计划风险</button>
+   </form></article>
+   <div id="risk-result" class="panel result" aria-live="polite"><h3>填写价格后开始计算</h3><p class="muted">默认示例：买入100元、失效98元、100股。价格均为演示，并不对应具体股票。</p></div>
+   <article class="panel"><h3>T+1 卖出限制提示</h3><div class="fields-2"><div class="field"><label for="buy-date">买入日期</label><input type="date" id="buy-date"></div><div class="field"><label for="sell-date">计划卖出日期</label><input type="date" id="sell-date"></div></div><p id="t1-result" class="muted">填写日期，检查最基本的当天卖出限制。</p></article>
+ </section>
+ <section id="journal" class="page" aria-label="交易复盘">
+   <div class="section-title"><h2>已结束的交易</h2><span class="tag">手动录入</span></div>
+   <article class="panel"><form class="form" id="journal-form">
+    <div class="fields-2"><div class="field"><label for="j-date">平仓日期</label><input type="date" id="j-date" required></div><div class="field"><label for="j-ticker">股票代码</label><input id="j-ticker" maxlength="6" inputmode="numeric" placeholder="6位数字" required></div></div>
+    <div class="fields-2"><div class="field"><label for="j-buy">买入成本价（元）</label><input type="number" id="j-buy" min="0.01" step="0.001" placeholder="0.00" required></div><div class="field"><label for="j-sell">卖出成交价（元）</label><input type="number" id="j-sell" min="0.01" step="0.001" placeholder="0.00" required></div></div>
+    <div class="fields-2"><div class="field"><label for="j-qty">本次卖出股数</label><input type="number" id="j-qty" min="1" step="1" value="100" required></div><div class="field"><label for="j-fees">总交易成本（元）</label><input type="number" id="j-fees" min="0" step="0.01" value="0" required></div></div>
+    <div class="field"><label for="j-support">家人额外奖励/补助（元，可填0）</label><input type="number" id="j-support" min="0" step="0.01" value="0" required></div>
+    <div class="field"><label for="j-note">交易原因/复盘备注（选填）</label><textarea id="j-note" rows="2" maxlength="240" placeholder="例如：放量突破买入，次日止盈；如实记录错误"></textarea></div>
+    <button type="submit" class="primary">保存交易记录</button>
+   </form></article>
+   <div class="section-title"><h3>记录列表</h3><button id="export-data" type="button" class="linkbutton">导出备份 JSON ↓</button></div>
+   <p class="muted small">收益公式：(卖价 − 成本价) × 股数 − 交易费用；不含持仓期间分红和公司行为，外部奖励独立列示。</p>
+   <div id="journal-list" class="journal-list"><p class="empty">还没有已完成的交易记录。</p></div>
+ </section>
+ <section id="config" class="page" aria-label="账户设置">
+   <div class="section-title"><h2>账户设置</h2><span class="tag">仅本地保存</span></div>
+   <article class="panel"><form class="form" id="config-form">
+    <div class="field"><label for="c-equity">当前账户权益（元）</label><input id="c-equity" type="number" min="1" step="0.01" required></div>
+    <div class="field"><label for="c-peak">历史最高账户权益（元）</label><input id="c-peak" type="number" min="1" step="0.01" required></div>
+    <div class="field"><label for="c-exposure">现有股票持仓总市值（元）</label><input id="c-exposure" type="number" min="0" step="0.01" required></div>
+    <div class="fields-2"><div class="field"><label for="c-daily">今日累计盈亏（元）</label><input id="c-daily" type="number" step="0.01" required></div><div class="field"><label for="c-weekly">本周累计盈亏（元）</label><input id="c-weekly" type="number" step="0.01" required></div></div>
+    <button type="submit" class="primary">保存账户参数</button>
+   </form></article>
+   <article class="panel"><h3>当前固定风控阈值</h3><div class="rules"><p>单笔价差预算 <b>0.25%</b></p><p>单股持仓上限 <b>5%</b></p><p>股票敞口上限 <b>20%</b></p><p>当日亏损暂停 <b>−0.5%</b></p><p>当周亏损暂停 <b>−1.5%</b></p><p>峰值回撤暂停 <b>−5%</b></p></div><p class="muted small">以上阈值来自初始方案，用于保守测试，并非适合所有交易或能够保证限损。</p></article>
+   <article class="panel"><h3>你的数据在哪里？</h3><p class="muted">本版无登录、无后端、无券商连接。数据保存在当前浏览器的本地存储中；清除浏览器网站数据、更换设备或隐私模式都可能导致丢失。请定期在「交易复盘」里导出备份；不要填写任何账户密码或身份信息。</p><button id="clear-data" class="danger-text" type="button">清空此浏览器中记录和设置</button></article>
+ </section>
+</main>
+<footer>© 2026 A-Share Lab · 研究与复盘工具 · 无实盘行情 · 无自动交易</footer>
+</div>
+<script>
+/** Deterministic risk rules for manual A-share scenario calculations. No order routing. */
+const DEFAULTS = Object.freeze({
+  equity: 500000,
+  peakEquity: 500000,
+  dailyPnl: 0,
+  weeklyPnl: 0,
+  exposure: 0,
+  perTradeRiskPct: 0.0025,
+  singlePositionPct: 0.05,
+  totalExposurePct: 0.2,
+  dailyLossPct: 0.005,
+  weeklyLossPct: 0.015,
+  drawdownPct: 0.05,
+});
+
+function validNumber(x) { return typeof x === 'number' && Number.isFinite(x); }
+function issue(code, message, kind = 'block') { return { code, message, kind }; }
+
+function evaluateRisk(input) {
+  const settings = { ...DEFAULTS, ...(input.settings || {}) };
+  const entry = Number(input.entry);
+  const stop = Number(input.stop);
+  const qty = Number(input.qty);
+  const equity = Number(settings.equity);
+  const peak = Number(settings.peakEquity);
+  const exposure = Number(settings.exposure);
+  const daily = Number(settings.dailyPnl);
+  const weekly = Number(settings.weeklyPnl);
+  const existingSame = Number(input.existingSameValue || 0);
+  const checks = [];
+
+  const inputs = [entry, stop, qty, equity, peak, exposure, daily, weekly, existingSame];
+  if (inputs.some(x => !validNumber(x)) || equity <= 0 || peak <= 0 || exposure < 0 || existingSame < 0 || entry <= 0 || stop <= 0 || qty <= 0) {
+    return { status: 'invalid', checks: [issue('invalid_input','请输入完整且有效的正数价格、股数和账户数据。')], metrics: null };
+  }
+  if (input.quoteVerified !== true) checks.push(issue('unverified_quote','行情为手动输入，未核验时间与数据源；不能据此生成交易信号。','warn'));
+  if (input.halted === true) checks.push(issue('halted','股票停牌：不得假设可以正常买卖。'));
+  if (stop >= entry) checks.push(issue('bad_stop','多头计划的失效价格必须低于拟买入价。'));
+  if (!Number.isInteger(qty) || qty % 100 !== 0) checks.push(issue('invalid_lot','普通A股模拟买入股数须为100股的整数倍。'));
+  if (peak < equity) checks.push(issue('peak_invalid','账户历史峰值不应小于当前权益，请修正设置。'));
+
+  const notional = entry * qty;
+  const nominalLoss = Math.max(0, entry - stop) * qty;
+  const dd = peak >= equity ? (peak - equity) / peak : 0;
+  const limits = {
+    maxTradeLoss: equity * settings.perTradeRiskPct,
+    maxSinglePosition: equity * settings.singlePositionPct,
+    maxExposure: equity * settings.totalExposurePct,
+    maxDailyLoss: equity * settings.dailyLossPct,
+    maxWeeklyLoss: equity * settings.weeklyLossPct,
+    maxDrawdown: settings.drawdownPct,
+  };
+  if (nominalLoss > limits.maxTradeLoss) checks.push(issue('trade_loss','计划价差风险超过单笔预算（不含跳空、滑点及费用）。'));
+  if (notional + existingSame > limits.maxSinglePosition) checks.push(issue('single_position','该股票合计仓位超过5%单股限制。'));
+  if (notional + exposure > limits.maxExposure) checks.push(issue('total_exposure','加入计划仓位后，股票总敞口超过20%限制。'));
+  if (daily <= -limits.maxDailyLoss) checks.push(issue('daily_stop','今日累计盈亏已触及暂停新买入阈值。'));
+  if (weekly <= -limits.maxWeeklyLoss) checks.push(issue('weekly_stop','本周累计盈亏已触及暂停新买入阈值。'));
+  if (dd >= limits.maxDrawdown) checks.push(issue('drawdown_stop','账户回撤已触及暂停新买入阈值。'));
+  if (exposure > equity || existingSame > exposure) checks.push(issue('exposure_data','现有总敞口或单股市值数据自相矛盾，请核实。'));
+
+  const blocked = checks.some(c => c.kind === 'block');
+  return {
+    status: blocked ? 'blocked' : 'within_budget',
+    checks,
+    metrics: { notional, nominalLoss, dd, limits, afterExposure: notional + exposure, perTradeRiskUsed: limits.maxTradeLoss ? nominalLoss / limits.maxTradeLoss : 0 },
+  };
+}
+
+function evaluateSaleDate(buyDate, targetSellDate) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(buyDate || '') || !/^\d{4}-\d{2}-\d{2}$/.test(targetSellDate || '')) return '请填写有效的买入日期与拟卖出日期。';
+  if (targetSellDate <= buyDate) return '不能视为可卖：普通A股当天买入不可当天卖出；日期也不能早于买入日。';
+  return '日期已跨天，但仍必须核实下一个交易日、可卖数量、停牌与成交条件。';
+}
+
+function tradePnl({buyPrice,sellPrice,qty,fees}) {
+  const b=Number(buyPrice), s=Number(sellPrice), n=Number(qty), f=Number(fees);
+  if (![b,s,n,f].every(validNumber) || b<=0 || s<=0 || n<=0 || !Number.isInteger(n) || f<0) throw new Error('交易记录数据无效');
+  return Math.round(((s-b)*n-f)*100)/100;
+}
+
+const STORAGE = 'ashare-trading-lab-p0-v1';
+const $ = id => document.getElementById(id);
+const money = (n, decimals = 0) => '¥' + Number(n||0).toLocaleString('zh-CN',{minimumFractionDigits:decimals,maximumFractionDigits:decimals});
+const localDate = () => { const now = new Date(); return [now.getFullYear(),String(now.getMonth()+1).padStart(2,'0'),String(now.getDate()).padStart(2,'0')].join('-'); };
+let model = { settings: {...DEFAULTS}, trades: [] };
+let saved = true;
+try { const raw = localStorage.getItem(STORAGE); if(raw){const loaded=JSON.parse(raw); if(loaded && typeof loaded==='object'){model.settings={...DEFAULTS,...loaded.settings};model.trades=Array.isArray(loaded.trades)?loaded.trades:[];}} }catch(e){ saved=false; }
+function save() { try {localStorage.setItem(STORAGE,JSON.stringify(model));saved=true;return true;} catch(e){saved=false;notice('当前浏览器无法保存数据，请使用导出备份。');return false;} }
+function notice(str) { const el=$('notice');el.hidden=false;el.textContent=str; }
+function setTab(tab) { document.querySelectorAll('.tab').forEach(el=>{const active=el.dataset.tab===tab;el.classList.toggle('active',active);el.setAttribute('aria-selected', String(active));});document.querySelectorAll('.page').forEach(el=>el.classList.toggle('active',el.id===tab));$('notice').hidden=true;}
+document.querySelectorAll('.tab').forEach(el=>el.addEventListener('click',()=>setTab(el.dataset.tab)));
+function refreshHome(){const s=model.settings;$('home-equity').textContent=money(s.equity);$('home-trade-risk').textContent=money(s.equity*s.perTradeRiskPct);$('home-exposure-cap').textContent=money(s.equity*s.totalExposurePct);$('home-journal-count').textContent=`${model.trades.length} 笔`;const pnl=model.trades.reduce((v,t)=>v+Number(t.pnl||0),0);const support=model.trades.reduce((v,t)=>v+Number(t.support||0),0);$('home-pnl').textContent=money(pnl,2);$('home-pnl').className=pnl<0?'negative':pnl>0?'positive':'';$('home-support').textContent=money(support,2);}
+function populateSettings(){const s=model.settings;for (const [key,id] of [['equity','c-equity'],['peakEquity','c-peak'],['exposure','c-exposure'],['dailyPnl','c-daily'],['weeklyPnl','c-weekly']]) $(id).value=s[key];}
+$('config-form').addEventListener('submit',e=>{e.preventDefault();const s={...model.settings,equity:Number($('c-equity').value),peakEquity:Number($('c-peak').value),exposure:Number($('c-exposure').value),dailyPnl:Number($('c-daily').value),weeklyPnl:Number($('c-weekly').value)};if([s.equity,s.peakEquity,s.exposure,s.dailyPnl,s.weeklyPnl].some(x=>!Number.isFinite(x))||s.equity<=0||s.peakEquity<s.equity||s.exposure<0||s.exposure>s.equity){notice('设置无效：峰值应不低于当前权益，当前持仓市值不得超出账户权益。');return;}model.settings=s;save();refreshHome();notice('账户参数已保存，风险计算将使用新参数。');});
+$('risk-form').addEventListener('submit',e=>{e.preventDefault();const res=evaluateRisk({entry:Number($('risk-entry').value),stop:Number($('risk-stop').value),qty:Number($('risk-qty').value),existingSameValue:Number($('risk-existing').value),halted:$('risk-halted').checked,quoteVerified:false,settings:model.settings});const el=$('risk-result');el.replaceChildren();el.classList.toggle('blocked',res.status!=='within_budget');const h=document.createElement('h3');h.textContent=res.status==='invalid'?'输入无法校验':res.status==='blocked'?'计划触发风险限制':'未触发已配置的数量限制';el.append(h);const status=document.createElement('span');status.className='status '+(res.status==='within_budget'?'ok':'bad');status.textContent=res.status==='within_budget'?'仅表示预算内，不是买入信号':'禁止作为买入依据';el.append(status);if(res.metrics){const vals=document.createElement('div');vals.className='risk-values';for(const [label,val] of [['本次拟买入金额',res.metrics.notional],['计划价差风险（不含费用）',res.metrics.nominalLoss],['单笔损失预算',res.metrics.limits.maxTradeLoss],['交易后名义总敞口',res.metrics.afterExposure]]){const cell=document.createElement('div');const small=document.createElement('small');small.textContent=label;const strong=document.createElement('strong');strong.textContent=money(val,2);cell.append(small,strong);vals.append(cell);}el.append(vals);}const issues=document.createElement('ul');issues.className='checks';const msgs=res.checks.length?res.checks.map(c=>c.message):['计算未检测到超限；这不代表走势有利，也不保证止损价能够成交。'];for(const msg of msgs){const li=document.createElement('li');li.textContent=msg;issues.append(li);}el.append(issues);const extra=document.createElement('p');extra.className='muted small';extra.textContent='本工具不提供实时价格、实际可卖数量、涨跌停校验、交易费用和跳空滑点模拟。任何硬风控被触发，都应暂停新开仓研究。';el.append(extra);});
+function refreshT1(){if(!$('buy-date').value||!$('sell-date').value)return;$('t1-result').textContent=evaluateSaleDate($('buy-date').value,$('sell-date').value);}
+for(const id of ['buy-date','sell-date'])$(id).addEventListener('change',refreshT1);
+function renderJournal(){const box=$('journal-list');box.replaceChildren();if(model.trades.length===0){const empty=document.createElement('p');empty.className='empty';empty.textContent='还没有已完成的交易记录。';box.append(empty);return;}for(const trade of [...model.trades].reverse()){const card=document.createElement('article');card.className='journal-item';const header=document.createElement('div');header.className='line';const ident=document.createElement('span');ident.textContent=`${trade.ticker} · ${trade.date}`;const pnl=document.createElement('strong');pnl.className=trade.pnl<0?'negative':'positive';pnl.textContent=(trade.pnl>0?'+':'')+money(trade.pnl,2);header.append(ident,pnl);const detail=document.createElement('p');detail.textContent=`${trade.qty}股 · 买 ${money(trade.buyPrice,3)} / 卖 ${money(trade.sellPrice,3)} · 成本 ${money(trade.fees,2)}`;const support=document.createElement('p');support.textContent=`外部支持/奖励：${money(trade.support,2)}（不计入交易净盈亏）`;const note=document.createElement('p');note.textContent=trade.note||'未填写复盘原因';const del=document.createElement('button');del.type='button';del.textContent='删除记录';del.addEventListener('click',()=>{if(!confirm('确定删除这条记录吗？'))return;model.trades=model.trades.filter(t=>t.id!==trade.id);save();renderJournal();refreshHome();});card.append(header,detail,support,note,del);box.append(card);}}
+$('journal-form').addEventListener('submit',e=>{e.preventDefault();const ticker=$('j-ticker').value.trim();if(!/^\d{6}$/.test(ticker)){notice('股票代码请填写6位数字。');return;}const data={id:`${Date.now()}-${Math.random().toString(36).slice(2)}`,date:$('j-date').value,ticker,buyPrice:Number($('j-buy').value),sellPrice:Number($('j-sell').value),qty:Number($('j-qty').value),fees:Number($('j-fees').value),support:Number($('j-support').value),note:$('j-note').value.trim()};if(!/^\d{4}-\d{2}-\d{2}$/.test(data.date)||!Number.isFinite(data.support)||data.support<0){notice('日期或外部支持金额无效。');return;}try{data.pnl=tradePnl(data);}catch(e){notice('交易价格、股数或费用无效。');return;}model.trades.push(data);save();renderJournal();refreshHome();$('journal-form').reset();$('j-date').value=localDate();$('j-qty').value='100';$('j-fees').value='0';$('j-support').value='0';notice('交易已记录。交易净盈亏与外部奖励已分别统计。');});
+$('export-data').addEventListener('click',()=>{const backup=JSON.stringify({format:'A-Share-Lab P0 local backup',exportedAt:new Date().toISOString(),...model},null,2);const blob=new Blob([backup],{type:'application/json;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=`ashare-lab-backup-${localDate()}.json`;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),3000);notice('已发起导出。请用手机浏览器的文件或共享功能妥善保存。');});
+$('clear-data').addEventListener('click',()=>{if(!confirm('这会清空当前浏览器中的所有设置及交易记录。请确认已经导出备份。'))return;model={settings:{...DEFAULTS},trades:[]};save();populateSettings();renderJournal();refreshHome();notice('已重置为演示参数。');});
+$('j-date').value=localDate();$('sell-date').value=localDate();$('buy-date').value=localDate();populateSettings();renderJournal();refreshHome();if(!saved)notice('浏览器禁用本地存储，退出页面可能丢失数据。');
+
+</script>
+</body>
+</html>
