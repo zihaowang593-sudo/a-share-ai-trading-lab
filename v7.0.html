@@ -480,6 +480,8 @@ html[data-privacy="on"] #h-equity,html[data-privacy="on"] #h-budget,html[data-pr
 <div class="section"><h2>交易记录</h2><small id="j-count">0 笔</small></div><div id="journal-list" class="list"></div>
 </section>
 <section id="config" class="page"><div class="page-heading"><div><p class="eyebrow">YOUR WORKSPACE</p><h1>偏好与账户</h1><p>管理本地数据、风控参数和外观。</p></div></div><div class="settings-maker-note">全部内容由wzh本人制作</div>
+<div class="section"><h2>软件更新</h2><small>V7.0 · 在线更新</small></div>
+<div class="panel stock-update-settings"><p class="sub">检查并加载最新网页功能，无需重新安装 IPA。</p><button id="stock-update-btn" class="button secondary" type="button">检查更新</button></div>
 <div class="section"><h2>账号与同步</h2><span class="tag mutedtag">隐私优先</span></div><div class="panel"><div class="account-row"><div class="account-avatar" id="account-avatar">◎</div><div><strong id="account-label">本机访客</strong><div id="sync-label" class="sub">目前仅保存于本机浏览器，未开启云同步</div></div></div><p class="fine" id="account-privacy">本机模式不需要登录；它不是加密的私人账户，在同一浏览器里打开网页的人可能看到这些记录。跨设备私密同步须先部署 Firebase Auth 和按用户隔离的 Firestore 规则。</p><div class="account-actions"><button class="button secondary" type="button" id="google-login">使用 Google 登录</button><button class="button minor" type="button" id="google-logout" hidden>退出登录</button><button class="button minor" type="button" id="account-import-local" hidden>将本机数据复制到我的账号</button></div><p id="google-help" class="fine">Google 登录尚未启用：需要先填写 Firebase 公共项目配置并部署安全规则。网站不会要求你的券商密码。</p><p id="cloud-write-status" class="fine" aria-live="polite">当前状态：本机保存</p></div><div class="section"><h2>外观与交互</h2><small>你的私人研究空间</small></div>
 <div class="panel appearance-panel">
   <div class="appearance-heading"><div><p class="eyebrow">PERSONALIZE / STUDIO</p><h3>为你的研究空间选择氛围</h3><p class="sub">精选主题，信息层级保持一致。轻点即刻预览，自动记住你的选择。</p></div><span class="appearance-asterisk" aria-hidden="true">✳</span></div>
@@ -1440,7 +1442,7 @@ resize();start();
 })();
 </script>
 <style id="stock-update-style">
-#stock-update-btn{position:fixed;right:13px;bottom:calc(env(safe-area-inset-bottom,0px) + 18px);z-index:2147483000;border:1px solid #d5dce8;background:#fff;color:#172033;border-radius:24px;box-shadow:0 4px 22px #0002;padding:10px 13px;font:600 13px -apple-system,BlinkMacSystemFont,sans-serif;cursor:pointer}
+#stock-update-btn{margin-top:10px;max-width:100%}
 #stock-update-panel{position:fixed;inset:0;z-index:2147483001;background:#0007;display:none;align-items:center;justify-content:center;padding:20px;font:14px -apple-system,BlinkMacSystemFont,sans-serif}
 #stock-update-panel.open{display:flex}#stock-update-dialog{width:min(100%,390px);background:#fff;color:#202633;border-radius:18px;padding:21px;box-shadow:0 20px 60px #0004}#stock-update-dialog h3{margin:0 0 10px;font-size:18px}#stock-update-dialog p{line-height:1.6;white-space:pre-wrap}#stock-update-dialog button{border:0;border-radius:10px;padding:11px 13px;margin:5px 5px 0 0;background:#edf0f5;color:#192236;font:600 13px -apple-system,sans-serif}#stock-update-dialog button.primary{background:#276cff;color:white}#stock-update-dialog button:disabled{opacity:.5}
 </style>
@@ -1452,7 +1454,7 @@ const MANIFEST=BASE+'version.json';
 const PAGE=BASE+'v7.0.html';
 const STABLE=BASE+'releases/7.0.0.html';
 const KEY='stock-update-last-working-url';
-const html=document.createElement('div');html.innerHTML='<button id="stock-update-btn" type="button">检查更新</button><div id="stock-update-panel" role="dialog" aria-modal="true" aria-label="软件更新"><div id="stock-update-dialog"><h3>软件更新</h3><p id="stock-update-message">正在检查…</p><div id="stock-update-actions"></div></div></div>';
+const html=document.createElement('div');html.innerHTML='<div id="stock-update-panel" role="dialog" aria-modal="true" aria-label="软件更新"><div id="stock-update-dialog"><h3>软件更新</h3><p id="stock-update-message">正在检查…</p><div id="stock-update-actions"></div></div></div>';
 while(html.firstChild)document.body.appendChild(html.firstChild);
 const panel=document.getElementById('stock-update-panel'),msg=document.getElementById('stock-update-message'),actions=document.getElementById('stock-update-actions'),btn=document.getElementById('stock-update-btn');
 const state={manifest:null};
