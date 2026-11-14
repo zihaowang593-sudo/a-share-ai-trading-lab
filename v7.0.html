@@ -1486,4 +1486,34 @@ window.stockUpdate={check:()=>check(false),retryPrevious(){let u;try{u=localStor
 if(!location.pathname.includes('/releases/'))setTimeout(()=>check(true),1500);else btn.textContent='稳定版 · 更新';
 })();
 </script>
+<style id="finance-settings-transition-style">
+#finance-settings-transition{position:fixed;inset:0;z-index:2147482000;display:grid;place-items:center;background:#0b1422;color:#d7e4ee;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .16s ease,visibility .16s}
+#finance-settings-transition.playing{opacity:1;visibility:visible;pointer-events:auto}
+.finance-transition-inner{width:min(72vw,300px);text-align:center}
+.finance-transition-line{width:100%;height:52px;display:block}
+.finance-transition-line path{stroke:#75b7b0;stroke-width:1.6;fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:400;stroke-dashoffset:400}
+.playing .finance-transition-line path{animation:finance-line-draw .52s cubic-bezier(.2,.7,.2,1) forwards}
+.finance-transition-label{font:500 10px/1.6 -apple-system,BlinkMacSystemFont,sans-serif;letter-spacing:.3em;color:#9fb5c3;margin-top:15px;opacity:0}
+.playing .finance-transition-label{animation:finance-label-in .3s ease .15s forwards}
+@keyframes finance-line-draw{to{stroke-dashoffset:0}}
+@keyframes finance-label-in{to{opacity:1}}
+@media(prefers-reduced-motion:reduce){#finance-settings-transition,.playing .finance-transition-line path,.playing .finance-transition-label{animation:none!important;transition:none!important}}
+</style>
+<div id="finance-settings-transition" aria-hidden="true"><div class="finance-transition-inner"><svg class="finance-transition-line" viewBox="0 0 300 52" role="presentation"><path d="M1 38 L44 38 L67 26 L90 32 L113 15 L135 22 L157 11 L180 19 L204 8 L229 15 L251 6 L277 12 L299 4"/></svg><div class="finance-transition-label">SYSTEM / SETTINGS</div></div></div>
+<script>
+(function(){
+const trigger=document.querySelector('[data-goto="config"]');
+const overlay=document.getElementById('finance-settings-transition');
+if(!trigger||!overlay)return;
+let busy=false;
+trigger.addEventListener('click',function(event){
+if(busy||document.getElementById('config')?.classList.contains('active'))return;
+event.stopImmediatePropagation();event.preventDefault();
+if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){tab('config');return}
+busy=true;overlay.classList.add('playing');
+setTimeout(function(){tab('config')},530);
+setTimeout(function(){overlay.classList.remove('playing');busy=false},810);
+},true);
+})();
+</script>
 </body></html>
