@@ -1439,4 +1439,49 @@ const m=matchMedia('(prefers-reduced-motion: reduce)');if(m.addEventListener)m.a
 resize();start();
 })();
 </script>
+<style id="stock-update-style">
+#stock-update-btn{position:fixed;right:13px;bottom:calc(env(safe-area-inset-bottom,0px) + 18px);z-index:2147483000;border:1px solid #d5dce8;background:#fff;color:#172033;border-radius:24px;box-shadow:0 4px 22px #0002;padding:10px 13px;font:600 13px -apple-system,BlinkMacSystemFont,sans-serif;cursor:pointer}
+#stock-update-panel{position:fixed;inset:0;z-index:2147483001;background:#0007;display:none;align-items:center;justify-content:center;padding:20px;font:14px -apple-system,BlinkMacSystemFont,sans-serif}
+#stock-update-panel.open{display:flex}#stock-update-dialog{width:min(100%,390px);background:#fff;color:#202633;border-radius:18px;padding:21px;box-shadow:0 20px 60px #0004}#stock-update-dialog h3{margin:0 0 10px;font-size:18px}#stock-update-dialog p{line-height:1.6;white-space:pre-wrap}#stock-update-dialog button{border:0;border-radius:10px;padding:11px 13px;margin:5px 5px 0 0;background:#edf0f5;color:#192236;font:600 13px -apple-system,sans-serif}#stock-update-dialog button.primary{background:#276cff;color:white}#stock-update-dialog button:disabled{opacity:.5}
+</style>
+<script id="stock-update-script">
+(()=>{'use strict';
+const CURRENT='7.0.0';
+const BASE='https://zihaowang593-sudo.github.io/a-share-ai-trading-lab/';
+const MANIFEST=BASE+'version.json';
+const PAGE=BASE+'v7.0.html';
+const STABLE=BASE+'releases/7.0.0.html';
+const KEY='stock-update-last-working-url';
+const html=document.createElement('div');html.innerHTML='<button id="stock-update-btn" type="button">检查更新</button><div id="stock-update-panel" role="dialog" aria-modal="true" aria-label="软件更新"><div id="stock-update-dialog"><h3>软件更新</h3><p id="stock-update-message">正在检查…</p><div id="stock-update-actions"></div></div></div>';
+while(html.firstChild)document.body.appendChild(html.firstChild);
+const panel=document.getElementById('stock-update-panel'),msg=document.getElementById('stock-update-message'),actions=document.getElementById('stock-update-actions'),btn=document.getElementById('stock-update-btn');
+const state={manifest:null};
+function show(t,buttons){msg.textContent=t;actions.replaceChildren();for(const b of buttons){const el=document.createElement('button');el.textContent=b.label;el.className=b.primary?'primary':'';el.onclick=b.action;actions.appendChild(el)}panel.classList.add('open')}
+const close=()=>panel.classList.remove('open');
+function cmp(a,b){const aa=String(a).split('.').map(Number),bb=String(b).split('.').map(Number);for(let i=0;i<3;i++){const d=(aa[i]||0)-(bb[i]||0);if(d)return d}return 0}
+async function check(silent=false){if(!silent)show('正在检查更新…',[{label:'关闭',action:close}]);try{
+const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),9000);
+let res;try{res=await fetch(MANIFEST+'?t='+Date.now(),{cache:'no-store',signal:controller.signal})}finally{clearTimeout(timer)}
+if(!res.ok)throw Error('服务器返回 '+res.status);
+const m=await res.json();if(!m||!/^\d+\.\d+\.\d+$/.test(m.version)||m.page!=='v7.0.html')throw Error('版本文件格式不正确');
+state.manifest=m;
+if(cmp(m.version,CURRENT)>0){btn.textContent='发现新版本';show('发现新版 '+m.version+'（当前 '+CURRENT+'）\n'+String(m.notes||'优化与功能更新'),[{label:'稍后',action:close},{label:'立即更新',primary:true,action:()=>apply(m)}]);}
+else{btn.textContent='检查更新';if(!silent)show('当前版本 '+CURRENT+'，已是最新版本。',[{label:'关闭',action:close}])}
+}catch(e){btn.textContent='检查更新';if(!silent)show('检查失败：'+(e?.message||'网络异常')+'。\n现有页面仍可继续使用。',[{label:'重试',primary:true,action:()=>check(false)},{label:'关闭',action:close}])}}
+async function apply(m){show('正在验证新版页面是否可以访问…',[{label:'取消',action:close}]);try{
+const u=new URL(PAGE);u.searchParams.set('app_version',m.version);u.searchParams.set('refresh',String(Date.now()));
+const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),12000);
+let r;try{r=await fetch(u.toString(),{cache:'no-store',signal:controller.signal})}finally{clearTimeout(timer)}
+if(!r.ok)throw Error('新版页面无法访问（'+r.status+'）');const body=await r.text();if(!body.includes('</html>')||body.length<10000)throw Error('新版页面内容不完整');
+try{localStorage.setItem(KEY,location.href)}catch(_){}
+show('已验证新版文件，正在重新加载…',[{label:'取消',action:close}]);location.assign(u.toString());
+}catch(e){show('更新未完成：'+(e?.message||'网络异常')+'。\n已保留当前页面。',[{label:'重试',primary:true,action:()=>apply(m)},{label:'关闭',action:close}])}}
+btn.onclick=()=>show('当前网页版本 '+CURRENT+'。可检查新版，或回退到已保存的 V7.0.0 稳定快照。',[{label:'检查更新',primary:true,action:()=>check(false)},{label:'回退稳定版',action:()=>{if(confirm('将打开 V7.0.0 稳定快照。未同步的输入可能丢失，建议先保存数据。'))location.assign(STABLE)}},{label:'关闭',action:close}]);
+const isUpdated=new URLSearchParams(location.search).has('app_version');
+if(isUpdated){const m=document.createElement('meta');m.name='stock-update-loaded';m.content=CURRENT;document.head.appendChild(m)}
+// A previous URL is retained for manual retry; this is not an offline copy.
+window.stockUpdate={check:()=>check(false),retryPrevious(){let u;try{u=localStorage.getItem(KEY)}catch(_){}if(u&&u.startsWith(BASE))location.assign(u)}};
+if(!location.pathname.includes('/releases/'))setTimeout(()=>check(true),1500);else btn.textContent='稳定版 · 更新';
+})();
+</script>
 </body></html>
